@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import pagination %}
+{% from 'show_setup_macro.html' import show_setup with context %}
+
+
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/main.css') }}">
+  <div class="container">
+    <div class="my-3 border border-1 rounded-2 bg-light">
+      <form action="">
+        <div class="row p-2">
+          <div class="col-md-4">
+            <label for="car">Автомобиль</label>
+            <select class="form-select" id="car" name="car">
+              {% if cars %}
+              {% set car_id = search_params.get('car_id') | int %}
+                <option value="default" class="">Не выбрано</option>
+                {% for car in cars %}
+                  <option value="{{ car.id }}" class="" {% if car_id == car.id %} selected {% endif %}>{{ car.name }}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="track">Трасса</label>
+            <select class="form-select" id="track" name="track">
+              {% if tracks %}
+                {% set track_id = search_params.get('track_id') | int %}
+                <option value="default" class="">Не выбрано</option>
+                {% for track in tracks %}
+                  <option value="{{ track.id }}" class="" {% if track_id == track.id %} selected {% endif %}>{{ track.name }}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="title"></label>
+            <button class="btn btn-primary form-control" type="submit">Найти</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="row my-4">
+
+      {% if setups %}
+      {% for setup in setups %}
+        {{ show_setup(setup) }}
+      {% endfor %}
+    {% endif %}
+    </div>
+
+      </div>
+
+        <div class="container d-flex justify-content-center mt-3">
+          {{pagination(page, page_count, request.endpoint)}}
+        </div>
+        {% if current_user.is_authenticated %}
+        {% if current_user.is_admin() %}
+      {% endif %}
+      {% endif %}
+
+
+
+ 
+  <script src="{{ url_for('static', filename='delete.js')}}"></script>
+  <script src="{{ url_for('static', filename='create_book_compilation.js')}}"></script>
+
+{% endblock %}
