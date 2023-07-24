@@ -9,10 +9,10 @@
 		},
 		"alignment":
 		{
-			"camber": [ 0, 0, 0, 0 ],
-			"toe": [ 10, 10, 0, 0 ],
-			"staticCamber": [ -4.1273221969604492, -4.1209335327148438, -1.8798201084136963, -1.8751001358032227 ],
-			"toeOutLinear": [ 0.0002471111947670579, 0.00024710540310479701, 0.00033855604124255478, 0.00033856969093903899 ],
+			"camber": [ 3, 3, 2, 2 ],
+			"toe": [ 15, 15, 3, 3 ],
+			"staticCamber": [ -3.8166298866271973, -3.8101027011871338, -1.7242425680160522, -1.7191382646560669 ],
+			"toeOutLinear": [ 0.00012930203229188919, 0.00012931771925650537, 0.0002722721837926656, 0.00027230175328440964 ],
 			"casterLF": 40,
 			"casterRF": 40,
 			"steerRatio": 3
@@ -28,11 +28,11 @@
 		},
 		"strategy":
 		{
-			"fuel": 12,
+			"fuel": 118,
 			"nPitStops": 0,
-			"tyreSet": 0,
-			"frontBrakePadCompound": 0,
-			"rearBrakePadCompound": 0,
+			"tyreSet": 18,
+			"frontBrakePadCompound": 1,
+			"rearBrakePadCompound": 1,
 			"pitStrategy": [
 				{
 					"fuelToAdd": 0,
@@ -46,7 +46,7 @@
 					"rearBrakePadCompound": 0
 				}
 			],
-			"fuelPerLap": 3.5999999046325684
+			"fuelPerLap": 3.3057136535644531
 		}
 	},
 	"advancedSetup":
@@ -55,26 +55,26 @@
 		{
 			"aRBFront": 6,
 			"aRBRear": 0,
-			"wheelRate": [ 2, 2, 0, 0 ],
-			"bumpStopRateUp": [ 16, 16, 20, 20 ],
+			"wheelRate": [ 3, 3, 1, 1 ],
+			"bumpStopRateUp": [ 21, 21, 16, 16 ],
 			"bumpStopRateDn": [ 0, 0, 10, 10 ],
 			"bumpStopWindow": [ 10, 10, 60, 60 ],
 			"brakeTorque": 20,
-			"brakeBias": 5
+			"brakeBias": 10
 		},
 		"dampers":
 		{
 			"bumpSlow": [ 20, 20, 5, 5 ],
 			"bumpFast": [ 40, 40, 40, 40 ],
 			"reboundSlow": [ 26, 26, 35, 35 ],
-			"reboundFast": [ 40, 40, 40, 40 ]
+			"reboundFast": [ 40, 40, 49, 49 ]
 		},
 		"aeroBalance":
 		{
 			"rideHeight": [ 0, 11, 0, 18 ],
-			"rodLength": [ 22.20939826965332, 22.20939826965332, 2.305762767791748, 2.305762767791748 ],
+			"rodLength": [ 20.954317092895508, 20.954317092895508, 1.3362517356872559, 1.3362517356872559 ],
 			"splitter": 0,
-			"rearWing": 0,
+			"rearWing": 1,
 			"brakeDuct": [ 3, 3 ]
 		},
 		"drivetrain":

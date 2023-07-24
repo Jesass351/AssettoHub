@@ -2,7 +2,7 @@ import os
 
 SECRET_KEY = 'os.urandom(12).hex()'
 
-SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector
+SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = True
@@ -16,7 +16,7 @@ SETUP_ACTIONS = {
     'like': 2
 }
 
-BOOKS_PER_PAGE_INDEX = 5
+SETUPS_PER_PAGE_INDEX = 1
 SETUPS_UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media', 'files')
 
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media', 'images')

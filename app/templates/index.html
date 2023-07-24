@@ -36,7 +36,7 @@
             </select>
           </div>
           <div class="col-md-4">
-            <label for="title"></label>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary form-control mb-2">Сброс</a>
             <button class="btn btn-primary form-control" type="submit">Найти</button>
           </div>
         </div>
@@ -55,7 +55,7 @@
       </div>
 
         <div class="container d-flex justify-content-center mt-3">
-          {{pagination(page, page_count, request.endpoint)}}
+          {{ pagination(page, page_count, request.endpoint, search_params) }}
         </div>
         {% if current_user.is_authenticated %}
         {% if current_user.is_admin() %}

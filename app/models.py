@@ -64,7 +64,7 @@ class Setup(db.Model):
     __tablename__ = 'Setups'
     
     id = db.Column(db.Integer, primary_key=True)
-    time = db.Column(db.String(100), nullable=False)
+    time = db.Column(db.Float, nullable=False)
     description = db.Column(db.String(100), nullable=False)
     car_id = db.Column(db.Integer, db.ForeignKey('Cars.id'), nullable=False)
     track_id = db.Column(db.Integer, db.ForeignKey('Tracks.id'), nullable=False)
@@ -73,8 +73,6 @@ class Setup(db.Model):
     title = db.Column(db.String(100), nullable=False)
     author_id = db.Column(db.Integer, nullable=False)
     file_id = db.Column(db.String(40), nullable=False)
-    
-
     
     downloaded = db.Column(db.Integer, default=0)
     likes = db.Column(db.Integer, default=0)
@@ -101,6 +99,18 @@ class Setup(db.Model):
     
     def get_action_count(self, action):
         return SetupStat.query.filter_by(setup_id=self.id, action_id=action).count()
+    
+    def time_to_int(self):
+        time = self.time.split(':')
+        minutes = int(time[0]) * 60
+        secs = float(time[1])
+        return minutes + secs
+    
+    @property
+    def int_to_time(self):
+        minutes = int(self.time // 60)
+        secs = round(self.time - minutes * 60, 1)
+        return f'{minutes}:{secs}'
     
 class SetupStat(db.Model):
     __tablename__ = 'SetupStat'

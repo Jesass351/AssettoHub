@@ -81,35 +81,29 @@ def edit(setupID):
 @login_required
 # @check_rights('setupID')
 def edit_post(setupID):
-    try:
+    # try:
         params_from_form = params()
         for param in params_from_form:
             param = bleach.clean(param)
             
-        book = Book(**params_from_form)
-        db.session.query(Book).filter(Book.bookID == bookID).update({
-            'title': book.title,
-            'desc': book.desc,
-            'year_writing': book.year_writing,
-            'publishing': book.publishing,
-            'author': book.author,
-            'pages': book.pages
+        setup = Setup(**params_from_form)
+        db.session.query(Setup).filter(Setup.id == setupID).update({
+            'time': setup.time_to_int(),
+            'description': setup.description,
+            'car_id': setup.car_id,
+            'track_id': setup.track_id,
+            'condition_air': setup.condition_air,
+            'condition_track': setup.condition_track,
+            'title': setup.title,
             })
-        db.session.query(Books_Genres).filter(Books_Genres.book_id == bookID).delete()
         
         db.session.commit()
-        genres_form = request.form.getlist("genre")
-        
-        for genre in genres_form:
-            db.session.add(Books_Genres(**{'book_id':bookID,'genre_id': genre}))
-        db.session.commit()
-
         
         flash('Запись успешно изменена','success')
-    except exc.SQLAlchemyError as error:
-        flash('При сохранении данных возникла ошибка. Проверьте корректность введённых данных.', 'danger')
-        db.session.rollback()
-    return redirect(url_for('books.show', bookID = bookID))
+    # except exc.SQLAlchemyError as error:
+        # flash('При сохранении данных возникла ошибка. Проверьте корректность введённых данных.', 'danger')
+        # db.session.rollback()
+        return redirect(url_for('setups.show', setupID = setupID))
 
 @bp.route('/create')
 # @login_required
@@ -162,6 +156,7 @@ def create_post():
         params_from_form['author_id'] = current_user.id
             
         setup = Setup(**params_from_form)
+        setup.time = setup.time_to_int()
         if f:
             setup.file_id = setup_file.id
         db.session.add(setup)
@@ -178,6 +173,8 @@ def like(setupID):
 @bp.route('/<int:setupID>')
 def show(setupID):
     setup = db.session.execute(db.select(Setup).filter_by(id=setupID)).scalar()
+    setup.description = markdown.markdown(setup.description)
+    
     with open(f'media/files/{setup.file_id}.json', 'r', encoding='utf-8') as f: #открыли файл
         file = json.load(f)
     download_status = False

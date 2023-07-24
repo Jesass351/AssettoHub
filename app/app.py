@@ -44,7 +44,15 @@ def search_params():
 
 @app.route('/')
 def index():
-    setups = db.session.execute(filtered_setups(search_params())).scalars()
+    page = request.args.get('page', 1, type=int)
+    setups = db.session.execute(filtered_setups(search_params()).order_by(Setup.created_at).limit(app.config['SETUPS_PER_PAGE_INDEX']).offset(app.config['SETUPS_PER_PAGE_INDEX'] * (page - 1))).scalars()
+
+    
+    #исправить!!!!
+    setup_count = len(db.session.execute(filtered_setups(search_params())).all())
+    
+    
+    page_count = math.ceil(setup_count / app.config['SETUPS_PER_PAGE_INDEX'])
 
     cars = db.session.execute(db.select(Car)).scalars()
     tracks = db.session.execute(db.select(Track)).scalars()
@@ -72,10 +80,8 @@ def index():
     # flash("При загрузке данных произошла ошибка",'danger')
     return render_template(
     'index.html',
-    books = [],
-    page = 1,
-    page_count = 1,
-    
+    page = page,
+    page_count = page_count,
     setups=setups,
     cars=cars,
     tracks=tracks,
