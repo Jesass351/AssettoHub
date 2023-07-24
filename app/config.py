@@ -16,7 +16,9 @@ SETUP_ACTIONS = {
     'like': 2
 }
 
-SETUPS_PER_PAGE_INDEX = 1
+MAX_CONTENT_LENGTH = 0.5 * 1024 * 1024
+
+SETUPS_PER_PAGE_INDEX = 10
 SETUPS_UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media', 'files')
 
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media', 'images')

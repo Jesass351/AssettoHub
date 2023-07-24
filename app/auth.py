@@ -30,7 +30,6 @@ def login():
             user = db.session.execute(db.select(User).filter_by(login=login)).scalar()
             if user and user.check_password(password):
                 login_user(user)
-                flash('Вы успешно аутентифицированы.', 'success')
                 next = request.args.get('next')
                 return redirect(next or url_for('index'))
         flash('Невозможно аутентифицироваться с указанными логином и паролем', 'danger')
@@ -62,7 +61,6 @@ def register():
                     db.session.add(user)
                     db.session.commit()
                     login_user(user)
-                    flash('Вы успешно аутентифицированы.', 'success')
                     next = request.args.get('next')
                     return redirect(next or url_for('index'))
                 else:

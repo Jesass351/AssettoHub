@@ -28,7 +28,7 @@
       </div>
       {% if extra_buttons %}
       <a href="{{ url_for('setups.edit', setupID=setup.id) }}" class="btn btn-secondary w-100">Редактировать</a>
-      <button type="button" class="btn btn-danger mt-1 w-100" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('setups.delete_post', setupID=setup.id) }}" data-title="{{ setup.title }}" > Удалить </button>
+      <button type="button" class="btn btn-danger mt-1 mb-3 w-100" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ url_for('setups.delete_post', setupID=setup.id) }}" data-title="{{ setup.title }}" > Удалить </button>
       {% endif %}
   </div>
 {% endmacro %}

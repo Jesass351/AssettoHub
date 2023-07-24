@@ -13,7 +13,6 @@ def filtered_setups(search_params): #фу
         query = query.filter_by(track_id = search_params.get('track_id'))
         
     return query
-    
 
 class ImageSaver:
     def __init__(self, file):

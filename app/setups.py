@@ -61,15 +61,27 @@ SETUP_PARAMS = [
     'time', 'description', 'car_id', 'track_id', 'condition_track', 'condition_air', 'title'
 ]
 
+def user_is_author(setup):
+    if setup.author_id == current_user.id:
+        return True
+    if current_user.is_admin():
+        return True
+    return False
+
+
 def params():
     return { p: request.form.get(p) for p in SETUP_PARAMS }
     
 @bp.route('/edit/<int:setupID>')
 @login_required
-# @check_rights('edit_book')
 def edit(setupID):
     try:
         setup = db.session.execute(db.select(Setup).filter_by(id=setupID)).scalar()
+        
+        if not user_is_author(setup):
+            flash('Недостаточно прав для выполнения данного действия', 'warning')
+            return redirect(url_for('index'))
+        
         cars = db.session.execute(db.select(Car)).scalars()
         tracks = db.session.execute(db.select(Track)).scalars()
     except exc.SQLAlchemyError as error:
@@ -87,6 +99,11 @@ def edit_post(setupID):
             param = bleach.clean(param)
             
         setup = Setup(**params_from_form)
+        
+        if not user_is_author(setup):
+            flash('Недостаточно прав для выполнения данного действия', 'warning')
+            return redirect(url_for('index'))
+        
         db.session.query(Setup).filter(Setup.id == setupID).update({
             'time': setup.time_to_int(),
             'description': setup.description,
@@ -106,8 +123,7 @@ def edit_post(setupID):
         return redirect(url_for('setups.show', setupID = setupID))
 
 @bp.route('/create')
-# @login_required
-# @check_rights('create_book')
+@login_required
 def create():
     cars = db.session.execute(db.select(Car)).scalars()
     tracks = db.session.execute(db.select(Track)).scalars()
@@ -115,10 +131,12 @@ def create():
     
 @bp.route('/delete/<int:setupID>', methods=['POST'])
 @login_required
-# @check_rights('delete_book')
 def delete_post(setupID):
     # try:
         setup = db.session.execute(db.select(Setup).filter_by(id = setupID)).scalar()
+        if not user_is_author(setup):
+            flash('Недостаточно прав для выполнения данного действия', 'warning')
+            return redirect(url_for('index'))
         if Setup.query.filter_by(file_id=setup.file_id).count() == 1:
             file = db.session.execute(db.select(SetupFile).filter_by(id = setup.file_id)).scalar()
             os.remove(f'media/files/{setup.file_id}.json')
@@ -137,7 +155,6 @@ def delete_post(setupID):
 
 @bp.route('/create_post', methods=['POST'])
 @login_required
-# @check_rights('create_book')
 def create_post():
     # try:
         f = request.files.get('setup_file')
@@ -166,8 +183,9 @@ def create_post():
         
 @bp.route('like/<int:setupID>')
 def like(setupID):
-    db.session.add(SetupStat(**{'user_id':current_user.id,'setup_id': setupID, 'action_id':app.config['SETUP_ACTIONS'].get('like', 2)}))
-    db.session.commit()
+    if current_user.check_already_action(setupID, app.config['SETUP_ACTIONS'].get('like', 2)):
+        db.session.add(SetupStat(**{'user_id':current_user.id,'setup_id': setupID, 'action_id':app.config['SETUP_ACTIONS'].get('like', 2)}))
+        db.session.commit()
     return redirect(url_for('setups.show', setupID=setupID))
 
 @bp.route('/<int:setupID>')
