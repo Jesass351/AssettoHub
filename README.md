@@ -6,8 +6,6 @@
 - ### SQLAlchemy
 - ### Jinja
 - ### Bootstrap v5.3
-- ### EasyMDE
-- ### bleach
 
 # Реализовано:
 - ## 24 июля 2023:
