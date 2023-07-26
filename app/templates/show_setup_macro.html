@@ -1,6 +1,5 @@
 {% macro show_setup(setup, extra_buttons=False) %}
 <script src="https://kit.fontawesome.com/9185e81767.js" crossorigin="anonymous"></script>
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='style/setup_card.css') }}"> -->
     <div class="col-sm-12 col-md-4">
       {% set car_info = setup.get_car(true) %}
       <div class="setup-card" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url({{ url_for('static', filename=car_info[1]) }});">

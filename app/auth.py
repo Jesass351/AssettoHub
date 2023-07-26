@@ -23,17 +23,22 @@ def load_user(user_id):
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        login = request.form.get('login')
-        password = request.form.get('password')
-        if login and password:
-            user = db.session.execute(db.select(User).filter_by(login=login)).scalar()
-            if user and user.check_password(password):
-                login_user(user)
-                next = request.args.get('next')
-                return redirect(next or url_for('index'))
-        flash('Невозможно аутентифицироваться с указанными логином и паролем', 'danger')
-    return render_template('auth/login.html')
+    try:
+        if request.method == 'POST':
+            login = request.form.get('login')
+            password = request.form.get('password')
+            if login and password:
+                user = db.session.execute(db.select(User).filter_by(login=login)).scalar()
+                if user and user.check_password(password):
+                    login_user(user)
+                    next = request.args.get('next')
+                    return redirect(next or url_for('index'))
+            flash('Невозможно аутентифицироваться с указанными логином и паролем', 'danger')
+        return render_template('auth/login.html')
+    except:
+        flash('Ошибка при загрузке данных')
+        return redirect(url_for('index'))
+        
 
 @bp.route('/logout')
 @login_required
@@ -43,29 +48,35 @@ def logout():
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        login = request.form.get('login')
-        password = request.form.get('password')
-        passwordAgain = request.form.get('passwordAgain')
-        if password != passwordAgain:
-            flash('Пароли не совпадают', 'danger')
-        else:
-            if login and password:
-                user = db.session.execute(db.select(User).filter_by(login=login)).scalar()
-                if user is None:
-                    first_name_form = request.form.get('first_name')
-                    last_name_form = request.form.get('last_name')
-                    middle_name_form = request.form.get('middle_name')
-                    user = User(first_name = first_name_form, last_name = last_name_form, middle_name = middle_name_form, login=login)
-                    user.set_password(password)
-                    db.session.add(user)
-                    db.session.commit()
-                    login_user(user)
-                    next = request.args.get('next')
-                    return redirect(next or url_for('index'))
-                else:
-                    flash('Пользователь с таким логином уже существует', 'danger')
-    return render_template('auth/register.html')
+    try:
+        if request.method == 'POST':
+            login = request.form.get('login')
+            password = request.form.get('password')
+            passwordAgain = request.form.get('passwordAgain')
+            if password != passwordAgain:
+                flash('Пароли не совпадают', 'danger')
+            else:
+                if login and password:
+                    user = db.session.execute(db.select(User).filter_by(login=login)).scalar()
+                    if user is None:
+                        first_name_form = request.form.get('first_name')
+                        last_name_form = request.form.get('last_name')
+                        middle_name_form = request.form.get('middle_name')
+                        user = User(first_name = first_name_form, last_name = last_name_form, middle_name = middle_name_form, login=login)
+                        user.set_password(password)
+                        db.session.add(user)
+                        db.session.commit()
+                        login_user(user)
+                        next = request.args.get('next')
+                        return redirect(next or url_for('index'))
+                    else:
+                        flash('Пользователь с таким логином уже существует', 'danger')
+        return render_template('auth/register.html')
+    except:
+        db.session.rollback()
+        flash('Ошибка при загрузке данных')
+        return redirect(url_for('index'))
+        
 
 
 def check_rights(action):

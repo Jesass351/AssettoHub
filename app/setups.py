@@ -6,7 +6,6 @@ from sqlalchemy import update, delete
 from flask_login import login_required, current_user
 import bleach
 from sqlalchemy import exc
-from auth import check_rights
 import markdown
 import os
 import json
@@ -95,9 +94,8 @@ def edit(setupID):
     
 @bp.route('/edit_post/<int:setupID>', methods=['POST'])
 @login_required
-# @check_rights('setupID')
 def edit_post(setupID):
-    # try:
+    try:
         params_from_form = params()
         for param in params_from_form:
             param = bleach.clean(param)
@@ -121,22 +119,28 @@ def edit_post(setupID):
         db.session.commit()
         
         flash('Запись успешно изменена','success')
-    # except exc.SQLAlchemyError as error:
-        # flash('При сохранении данных возникла ошибка. Проверьте корректность введённых данных.', 'danger')
-        # db.session.rollback()
         return redirect(url_for('setups.show', setupID = setupID))
+        
+    except exc.SQLAlchemyError as error:
+        flash('При сохранении данных возникла ошибка. Проверьте корректность введённых данных.', 'danger')
+        db.session.rollback()
+        return redirect(url_for('index'))
 
 @bp.route('/create')
 @login_required
 def create():
-    cars = db.session.execute(db.select(Car)).scalars()
-    tracks = db.session.execute(db.select(Track)).scalars()
-    return render_template('setups/add_setup.html',cars=cars, tracks=tracks)
+    try:
+        cars = db.session.execute(db.select(Car)).scalars()
+        tracks = db.session.execute(db.select(Track)).scalars()
+        return render_template('setups/add_setup.html',cars=cars, tracks=tracks)
+    except:
+        flash('Ошибка при загрузке данных', 'danger')
+        return redirect(url_for('index'))
     
 @bp.route('/delete/<int:setupID>', methods=['POST'])
 @login_required
 def delete_post(setupID):
-    # try:
+    try:
         setup = db.session.execute(db.select(Setup).filter_by(id = setupID)).scalar()
         if not user_is_author(setup):
             flash('Недостаточно прав для выполнения данного действия', 'warning')
@@ -152,15 +156,15 @@ def delete_post(setupID):
         db.session.commit()
         flash('Запись успешно удалена', 'success')
         return redirect(url_for('user.profile'))
-    # except:
-    #     db.session.rollback()
-    #     flash('Ошибка при удалении', 'danger')
-    # return redirect(url_for('index'))
+    except:
+        db.session.rollback()
+        flash('Ошибка при удалении', 'danger')
+        return redirect(url_for('index'))
 
 @bp.route('/create_post', methods=['POST'])
 @login_required
 def create_post():
-    # try:
+    try:
         f = request.files.get('setup_file')
     
         if f and f.filename:
@@ -184,6 +188,10 @@ def create_post():
         db.session.commit()
         flash(f'Настройка была успешно добавлена', 'success')
         return redirect(url_for('index'))
+    except:
+        db.session.rollback()
+        flash('Ошибка при добавлении','danger')
+        return redirect(url_for('index'))
         
 @bp.route('like/<int:setupID>')
 def like(setupID):
@@ -194,21 +202,25 @@ def like(setupID):
 
 @bp.route('/<int:setupID>')
 def show(setupID):
-    setup = db.session.execute(db.select(Setup).filter_by(id=setupID)).scalar()
-    setup.description = markdown.markdown(setup.description)
-    
-    with open(f'media/files/{setup.file_id}.json', 'r', encoding='utf-8') as f: #открыли файл
-        file = json.load(f)
-    download_status = False
-    if request.args.get('download_json'):
-        download_status = True
-    if download_status:
-        path = f'media/files/{setup.file_id}.json'
-        if current_user.is_authenticated:
-            if current_user.check_already_action(setupID, app.config['SETUP_ACTIONS'].get('download', 1)):
-                db.session.add(SetupStat(**{'user_id':current_user.id,'setup_id': setup.id, 'action_id':app.config['SETUP_ACTIONS'].get('download', 1)}))
-                db.session.commit()
-        return send_file(path, as_attachment=True, download_name=f'{setup.get_car()}_{setup.get_track()}_{setup.int_to_time}_{setup.condition_track}_{setup.condition_air}.json', mimetype="application/json")
-    car_data = CARS_DATA.get(setup.get_car(), '')
-    return render_template('setups/show_setup.html', setup=setup, file=file, car_data=car_data, general_car_data = GENERAL_CAR_DATA)
+    try:
+        setup = db.session.execute(db.select(Setup).filter_by(id=setupID)).scalar()
+        setup.description = markdown.markdown(setup.description)
+        
+        with open(f'media/files/{setup.file_id}.json', 'r', encoding='utf-8') as f: #открыли файл
+            file = json.load(f)
+        download_status = False
+        if request.args.get('download_json'):
+            download_status = True
+        if download_status:
+            path = f'media/files/{setup.file_id}.json'
+            if current_user.is_authenticated:
+                if current_user.check_already_action(setupID, app.config['SETUP_ACTIONS'].get('download', 1)):
+                    db.session.add(SetupStat(**{'user_id':current_user.id,'setup_id': setup.id, 'action_id':app.config['SETUP_ACTIONS'].get('download', 1)}))
+                    db.session.commit()
+            return send_file(path, as_attachment=True, download_name=f'{setup.get_car()}_{setup.get_track()}_{setup.int_to_time}_{setup.condition_track}_{setup.condition_air}.json', mimetype="application/json")
+        car_data = CARS_DATA.get(setup.get_car(), '')
+        return render_template('setups/show_setup.html', setup=setup, file=file, car_data=car_data, general_car_data = GENERAL_CAR_DATA)
+    except:
+        flash('Ошибка при отображении данных', 'danger')
+        return redirect(url_for('index'))
         
