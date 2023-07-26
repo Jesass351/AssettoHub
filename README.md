@@ -1,4 +1,5 @@
 # AssettoHub
+[Сайт на хостинге моего ВУЗа](http://assettohub.std-2033.ist.mospolytech.ru/)
 ## Маленький портальчик для обмена сетапами игры Assetto Corsa Competizione
 
 # При создании использовалось:
