@@ -30,8 +30,6 @@ BMW_M4_DATA = {
     'caster_min':8,
     'min_bp':80,
     'min_bb':53,
-    
-    
 }
 
 ASTON_MARTIN_V8_DATA = {
@@ -42,18 +40,24 @@ ASTON_MARTIN_V8_DATA = {
     'max_toe':1,
     'max_camber':5,
     'preload':[20,40],
-    'toe_min_front':-0.2,
+    'toe_min_front':-0.1,
     'toe_min_rear':0,
     'camber_min_front':-4,
     'camber_min_rear':-4,
     'caster_min':8,
     'min_bp':80,
     'min_bb':53,
+    'max_steer_ration': 15
+}
+
+GENERAL_CAR_DATA = {
+    'min_tire_pressure': 20.3,
+    
 }
 
 CARS_DATA = {
     'BMW M4': BMW_M4_DATA,
-    'Aston Martin V8': ASTON_MARTIN_V8_DATA
+    'Aston Martin V8': ASTON_MARTIN_V8_DATA,
 }
     
 
@@ -204,7 +208,7 @@ def show(setupID):
             if current_user.check_already_action(setupID, app.config['SETUP_ACTIONS'].get('download', 1)):
                 db.session.add(SetupStat(**{'user_id':current_user.id,'setup_id': setup.id, 'action_id':app.config['SETUP_ACTIONS'].get('download', 1)}))
                 db.session.commit()
-        return send_file(path, as_attachment=True, download_name=f'{setup.get_car()}_{setup.get_track()}_{setup.time}_{setup.condition_track}_{setup.condition_air}.json', mimetype="application/json")
+        return send_file(path, as_attachment=True, download_name=f'{setup.get_car()}_{setup.get_track()}_{setup.int_to_time}_{setup.condition_track}_{setup.condition_air}.json', mimetype="application/json")
     car_data = CARS_DATA.get(setup.get_car(), '')
-    return render_template('setups/show_setup.html', setup=setup, file=file, car_data=car_data)
+    return render_template('setups/show_setup.html', setup=setup, file=file, car_data=car_data, general_car_data = GENERAL_CAR_DATA)
         

@@ -69,7 +69,7 @@
             <span class="fs-4 fw-bold">Передняя левая</span>
             <div class="card">
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item bg-light">Давление: {{ file.basicSetup.tyres.tyrePressure[0] }} PSI</li>
+                  <li class="list-group-item bg-light">Давление: {{ general_car_data.min_tire_pressure + file.basicSetup.tyres.tyrePressure[0] / 10 }} PSI</li>
                   <li class="list-group-item bg-light">Схождение: {{ car_data.toe_min_front + file.basicSetup.alignment.toe[0] * 0.1|round }} °</li>
                   <li class="list-group-item bg-light">Развал: {{ car_data.camber_min_front + file.basicSetup.alignment.camber[0] * 0.1}} °</li>
                   <li class="list-group-item bg-light">Кастер: {{ car_data.caster_min + file.basicSetup.alignment.casterLF * 0.1}} °!!!!!!!!!!!!</li>
@@ -81,7 +81,7 @@
             <span class="fs-4 fw-bold">Передняя правая</span>
             <div class="card">
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item bg-light">Давление: {{ file.basicSetup.tyres.tyrePressure[1] }} PSI</li>
+                  <li class="list-group-item bg-light">Давление: {{ general_car_data.min_tire_pressure + file.basicSetup.tyres.tyrePressure[1] / 10 }} PSI</li>
                   <li class="list-group-item bg-light">Схождение: {{ car_data.toe_min_front + file.basicSetup.alignment.toe[1] * 0.1 }} °</li>
                   <li class="list-group-item bg-light">Развал: {{ car_data.camber_min_front + file.basicSetup.alignment.camber[1] * 0.1}} °</li>
                   <li class="list-group-item bg-light">Кастер: {{ car_data.caster_min + file.basicSetup.alignment.casterRF * 0.1}} °!!!!!!!!!!!!</li>
@@ -94,7 +94,7 @@
             <span class="fs-4 fw-bold">Задняя левая</span>
             <div class="card">
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item bg-light">Давление: {{ file.basicSetup.tyres.tyrePressure[2] }} PSI</li>
+                  <li class="list-group-item bg-light">Давление: {{ general_car_data.min_tire_pressure + file.basicSetup.tyres.tyrePressure[2] / 10 }} PSI</li>
                   <li class="list-group-item bg-light">Схождение: {{ (car_data.toe_min_rear + file.basicSetup.alignment.toe[2] * 0.1)|round(2) }} °</li>
                   <li class="list-group-item bg-light">Развал: {{ car_data.camber_min_rear + file.basicSetup.alignment.camber[2] * 0.1 }} °</li>
 
@@ -106,7 +106,7 @@
             <span class="fs-4 fw-bold">Задняя правая</span>
             <div class="card">
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item bg-light">Давление: {{ file.basicSetup.tyres.tyrePressure[3] }} PSI</li>
+                  <li class="list-group-item bg-light">Давление: {{ general_car_data.min_tire_pressure + file.basicSetup.tyres.tyrePressure[3] / 10 }}  PSI</li>
                   <li class="list-group-item bg-light">Схождение: {{ (car_data.toe_min_rear + file.basicSetup.alignment.toe[3] * 0.1)|round(2) }} °</li>
                   <li class="list-group-item bg-light">Развал: {{ car_data.camber_min_rear + file.basicSetup.alignment.camber[3] * 0.1}} °</li>
 
@@ -142,7 +142,7 @@
             <div class="card">
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item bg-light">Front Anti-Roll Bar: {{ file.advancedSetup.mechanicalBalance.aRBFront }}</li>
-                  <li class="list-group-item bg-light">Steer Ratio: {{ file.basicSetup.alignment.steerRatio }}</li>
+                  <li class="list-group-item bg-light">Steer Ratio: {{ car_data.max_steer_ration - file.basicSetup.alignment.steerRatio }}</li>
                 </ul>
               </div>
         </div>
