@@ -1,6 +1,6 @@
 import os
 
-SECRET_KEY = 'os.urandom(12).hex()'
+SECRET_KEY = 'os.urandom(10).hex()'
 
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
