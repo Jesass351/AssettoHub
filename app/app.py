@@ -45,13 +45,16 @@ def search_params():
 
 @app.route('/')
 def index():
-    try:
+    # try:
         page = request.args.get('page', 1, type=int)
         setups = db.session.execute(filtered_setups(search_params()).order_by(Setup.created_at).limit(app.config['SETUPS_PER_PAGE_INDEX']).offset(app.config['SETUPS_PER_PAGE_INDEX'] * (page - 1))).scalars()
 
         setup_count = len(db.session.execute(filtered_setups(search_params())).all())
         
         page_count = math.ceil(setup_count / app.config['SETUPS_PER_PAGE_INDEX'])
+
+        if page_count == 0:
+              page_count = 1
 
         cars = db.session.execute(db.select(Car)).scalars()
         tracks = db.session.execute(db.select(Track)).scalars()

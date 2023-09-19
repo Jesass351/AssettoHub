@@ -29,6 +29,7 @@ BMW_M4_DATA = {
     'caster_min':8,
     'min_bp':80,
     'min_bb':53,
+    'max_steer_ration': 15
 }
 
 ASTON_MARTIN_V8_DATA = {

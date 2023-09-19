@@ -23,7 +23,7 @@ def load_user(user_id):
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    try:
+    # try:
         if request.method == 'POST':
             login = request.form.get('login')
             password = request.form.get('password')
@@ -35,9 +35,9 @@ def login():
                     return redirect(next or url_for('index'))
             flash('Невозможно аутентифицироваться с указанными логином и паролем', 'danger')
         return render_template('auth/login.html')
-    except:
-        flash('Ошибка при загрузке данных')
-        return redirect(url_for('index'))
+    # except:
+    #     flash('Ошибка при загрузке данных')
+    #     return redirect(url_for('index'))
         
 
 @bp.route('/logout')
@@ -70,6 +70,7 @@ def register():
                         next = request.args.get('next')
                         return redirect(next or url_for('index'))
                     else:
+                        print('-------------')
                         flash('Пользователь с таким логином уже существует', 'danger')
         return render_template('auth/register.html')
     except:

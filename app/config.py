@@ -2,6 +2,8 @@ import os
 
 SECRET_KEY = 'os.urandom(10).hex()'
 
+SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://std_2033_assetto:NANO@std-mysql.ist.mospolytech.ru/std_2033_assetto'
+
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = True
