@@ -50,6 +50,24 @@ ASTON_MARTIN_V8_DATA = {
     'max_steer_ration': 15
 }
 
+STANDART_CAR_DATA = {
+    'wheel_rate':[90000, 120000, 144000],
+    'bump_stop_up':[],
+    'bump_stop_down':[],
+    'max_bb':56,
+    'max_toe':1,
+    'max_camber':5,
+    'preload':[20,40],
+    'toe_min_front':-0.2,
+    'toe_min_rear':0,
+    'camber_min_front':-4,
+    'camber_min_rear':-4,
+    'caster_min':8,
+    'min_bp':80,
+    'min_bb':53,
+    'max_steer_ration': 15
+}
+
 GENERAL_CAR_DATA = {
     'min_tire_pressure': 20.3,
     
@@ -58,6 +76,11 @@ GENERAL_CAR_DATA = {
 CARS_DATA = {
     'BMW M4': BMW_M4_DATA,
     'Aston Martin V8': ASTON_MARTIN_V8_DATA,
+    'Ferrari 296 GT3': STANDART_CAR_DATA,
+    'Mercedes AMG GT3 EVO': STANDART_CAR_DATA,
+    'Porsche 992 GT3 R': STANDART_CAR_DATA,
+    'Audi R8 LMS GT3 EVO II': STANDART_CAR_DATA,
+    'Mclaren 720S EVO': STANDART_CAR_DATA,
 }
     
 

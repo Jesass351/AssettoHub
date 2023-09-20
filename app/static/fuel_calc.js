@@ -19,15 +19,15 @@ function calcFuel(){
     document.getElementById("lapCount").textContent = lapCount;
 
     if (isZeroLap){
-        let zeroLapFuel = consumption * 1.8
-        let totalFuel = lapsFuel + zeroLapFuel
+        let zeroLapFuel = consumption * 1.8;
+        let totalFuel = lapsFuel + zeroLapFuel;
 
-        document.getElementById("totalFuel").textContent = totalFuel
-        document.getElementById("zeroLapFuel").textContent = zeroLapFuel
-        document.getElementById('zeroLapFuelP').classList.remove('d-none')
+        document.getElementById("totalFuel").textContent = Math.ceil(totalFuel);
+        document.getElementById("zeroLapFuel").textContent = Math.ceil(zeroLapFuel);
+        document.getElementById('zeroLapFuelP').classList.remove('d-none');
     } else {
-        document.getElementById("totalFuel").textContent = lapsFuel
-        document.getElementById('zeroLapFuelP').classList.add('d-none')
+        document.getElementById("totalFuel").textContent = Math.ceil(lapsFuel);
+        document.getElementById('zeroLapFuelP').classList.add('d-none');
     }
 }
 
