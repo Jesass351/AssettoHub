@@ -226,11 +226,11 @@ def like(setupID):
 
 @bp.route('/<int:setupID>')
 def show(setupID):
-    try:
+    # try:
         setup = db.session.execute(db.select(Setup).filter_by(id=setupID)).scalar()
         setup.description = markdown.markdown(setup.description)
         
-        with open(f'media/files/{setup.file_id}.json', 'r', encoding='utf-8') as f: #открыли файл
+        with open(os.path.join(app.config['SETUPS_UPLOAD_FOLDER'], setup.file_id + '.json'), 'r', encoding='utf-8') as f: #открыли файл
             file = json.load(f)
         download_status = False
         if request.args.get('download_json'):
@@ -244,7 +244,7 @@ def show(setupID):
             return send_file(path, as_attachment=True, download_name=f'{setup.get_car()}_{setup.get_track()}_{setup.int_to_time}_{setup.condition_track}_{setup.condition_air}.json', mimetype="application/json")
         car_data = CARS_DATA.get(setup.get_car(), '')
         return render_template('setups/show_setup.html', setup=setup, file=file, car_data=car_data, general_car_data = GENERAL_CAR_DATA)
-    except:
-        flash('Ошибка при отображении данных', 'danger')
-        return redirect(url_for('index'))
+    # except:
+    #     flash('Ошибка при отображении данных', 'danger')
+    #     return redirect(url_for('index'))
         
