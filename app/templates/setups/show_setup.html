@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block extra_head %}
-<title>{{ setup.title }}</title>
+<title>{{ setup.title | safe}}</title>
 
 {% endblock %}
 {% block content %}
