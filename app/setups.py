@@ -228,7 +228,7 @@ def like(setupID):
 def show(setupID):
     # try:
         setup = db.session.execute(db.select(Setup).filter_by(id=setupID)).scalar()
-        setup.description = markdown.markdown(setup.description)
+        setup.description = bleach.clean(setup.description)
         
         with open(os.path.join(app.config['SETUPS_UPLOAD_FOLDER'], setup.file_id + '.json'), 'r', encoding='utf-8') as f: #открыли файл
             file = json.load(f)
